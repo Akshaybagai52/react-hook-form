@@ -10,19 +10,42 @@ type FormValues = {
 
 const YoutubeForm = () => {
   const form = useForm<FormValues>();
-  const { register, control, handleSubmit } = form;
+  const { register, control, handleSubmit, formState } = form;
+  const { errors } = formState;
   const onSubmit = (data: FormValues) => {
     console.log("Form Submitted", data);
   };
   return (
     <div>
-      <form action="" onSubmit={handleSubmit(onSubmit)}>
+      <form action="" onSubmit={handleSubmit(onSubmit)} noValidate>
         <label htmlFor="username">Username</label>
-        <input type="text" id="username" {...register("username")} />
+        <input
+          type="text"
+          id="username"
+          {...register("username", { required: "Username is required" })}
+        />
+        <p>{errors.username?.message}</p>
         <label htmlFor="email">E-mail</label>
-        <input type="text" {...register("email")} id="email" />
+        <input
+          type="text"
+          {...register("email", { required: "Email is required" })}
+          id="email"
+        />
+        <p>{errors.email?.message}</p>
         <label htmlFor="password">Password</label>
-        <input type="password" {...register("password")} id="password" />
+        <input
+          type="password"
+          {...register("password", {
+            required: "Passowrd is Required",
+            pattern: {
+              value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+              message:
+                "Password must be at least 8 characters and contain at least one letter and one number",
+            },
+          })}
+          id="password"
+        />
+        <p>{errors.password?.message}</p>
 
         <button>Submit</button>
         <DevTool control={control} />
