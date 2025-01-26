@@ -28,7 +28,17 @@ const YoutubeForm = () => {
         <label htmlFor="email">E-mail</label>
         <input
           type="text"
-          {...register("email", { required: "Email is required" })}
+          {...register("email", {
+            required: "Email is required",
+            validate: {
+              noAdmin: (fieldValue) => {
+                return (
+                  fieldValue !== "admin@gmail.com" ||
+                  "Enter a different email address"
+                );
+              },
+            },
+          })}
           id="email"
         />
         <p>{errors.email?.message}</p>
